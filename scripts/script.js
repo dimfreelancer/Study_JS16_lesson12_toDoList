@@ -75,14 +75,27 @@ todoControl.addEventListener('submit', function(event) {
     event.preventDefault();
 
     //let value = headerInput.value;
-    // let completed = false;    
-    //новый обект
-    let newTodo = {
-        value: headerInput.value, //значение в поле input
-        completed: false  //false значит событие еще невыполнено
-    };
-    todoData.push(newTodo);
-    // todoData.push({value, completed}); //новый формат es6
+    // let completed = false;  
+    
+    //проверка на пустой ввод поля
+    if (headerInput.value.trim() === '') {
+
+        //пустое поле или пробелы
+        ((str) => {
+            console.log(str);
+            alert(str);
+        })('Поле не может быть пустым!');
+
+    } else {
+
+        //новый обект
+        let newTodo = {
+            value: headerInput.value, //значение в поле input
+            completed: false  //false значит событие еще невыполнено
+        };
+        todoData.push(newTodo);
+        // todoData.push({value, completed}); //новый формат es6
+    }
 
     todoControl.reset(); //обнуляем поля формы
 
