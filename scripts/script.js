@@ -17,12 +17,17 @@ const todoData = [
     {
         value: 'Сварить чай',
         completed: true
+    },
+    {
+        value: 'Сделать домашку сегодня',
+        completed: false
     }
 ];
 
 //пробуем отрендерить
 const render = function() {
-    //todoList.textContent = '';
+    //сразу же обнуляем списки листов
+    todoList.textContent = '';
     todoCompleted.textContent = '';
 
 
@@ -30,50 +35,62 @@ const render = function() {
         console.log('item: ', item);
 
 
-    
+        //генерим элементы как в тудушке
         let liTodoItem = document.createElement('li');
         liTodoItem.classList.add('todo-item');
-        let textTodo = document.createElement('span');
-        textTodo.classList.add('text-todo');
-        textTodo.textContent = 'сварить какого нибудь кофею';
+        let spanTextTodo = document.createElement('span');
+        spanTextTodo.classList.add('text-todo');
+        spanTextTodo.textContent = item.value;
+        // spanTextTodo.textContent = 'сварить какого нибудь кофею';
     
         let todoButtons = document.createElement('div');
         todoButtons.classList.add('todo-buttons');
+        
         let buttonTodoRemove = document.createElement('button');
-        buttonTodoRemove.classList.add('todo-remove');
         let buttonTodoComplete = document.createElement('button');
+        buttonTodoRemove.classList.add('todo-remove');
         buttonTodoComplete.classList.add('todo-complete');
         
         todoButtons.append(buttonTodoRemove, buttonTodoComplete);
-        liTodoItem.append(textTodo, todoButtons);
-        todoList.append(liTodoItem);
-        
+        liTodoItem.append(spanTextTodo, todoButtons);
+
+        //сделаем селектор сделано или не сделано
+        if (item.completed) {
+            //true - нижний список выполненных дел
+            todoCompleted.append(liTodoItem);
+        } else {
+            //false - верхний список еще невыполненных дел
+            todoList.append(liTodoItem);
+        }
         
         console.log('render done');
+    });//forEach
 
-    });
 };
 
 
+//добавляем слушатель события submit
+//submit реагирует на клик и на клавишу Enter
 todoControl.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    let value = headerInput.value;
-
+    //let value = headerInput.value;
+    // let completed = false;    
+    //новый обект
     let newTodo = {
-        value: value,
-        completed: false
+        value: headerInput.value, //значение в поле input
+        completed: false  //false значит событие еще невыполнено
     };
-
-    // todoData.push({value, completed}); //новый формат es6
     todoData.push(newTodo);
+    // todoData.push({value, completed}); //новый формат es6
 
-    console.log('todoData: ', todoData);
+    todoControl.reset(); //обнуляем поля формы
 
-    todoControl.reset();
-
-    render();
+    render(); //в конце события запускаем рендер списка
 });
+
+
+
 
 /* 
 todoControl.addEventListener('submit', function(event) {
