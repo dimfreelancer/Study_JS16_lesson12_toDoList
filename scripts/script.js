@@ -22,48 +22,58 @@ const todoData = [
 
 //пробуем отрендерить
 const render = function() {
+    //todoList.textContent = '';
+    todoCompleted.textContent = '';
 
-    console.log('todoList: ', todoList);
 
-    let liTodoItem = document.createElement('li');
-    liTodoItem.classList.add('todo-item');
-    let textTodo = document.createElement('span');
-    textTodo.classList.add('text-todo');
-    textTodo.textContent = 'сварить какого нибудь кофею';
+    todoData.forEach(function(item) {
+        console.log('item: ', item);
 
-    let todoButtons = document.createElement('div');
-    todoButtons.classList.add('todo-buttons');
-    let buttonTodoRemove = document.createElement('button');
-    buttonTodoRemove.classList.add('todo-remove');
-    let buttonTodoComplete = document.createElement('button');
-    buttonTodoComplete.classList.add('todo-complete');
+
     
-    todoButtons.append(buttonTodoRemove, buttonTodoComplete);
-    liTodoItem.append(textTodo, todoButtons);
-    todoList.append(liTodoItem);
-    console.log('render done');
+        let liTodoItem = document.createElement('li');
+        liTodoItem.classList.add('todo-item');
+        let textTodo = document.createElement('span');
+        textTodo.classList.add('text-todo');
+        textTodo.textContent = 'сварить какого нибудь кофею';
+    
+        let todoButtons = document.createElement('div');
+        todoButtons.classList.add('todo-buttons');
+        let buttonTodoRemove = document.createElement('button');
+        buttonTodoRemove.classList.add('todo-remove');
+        let buttonTodoComplete = document.createElement('button');
+        buttonTodoComplete.classList.add('todo-complete');
+        
+        todoButtons.append(buttonTodoRemove, buttonTodoComplete);
+        liTodoItem.append(textTodo, todoButtons);
+        todoList.append(liTodoItem);
+        
+        
+        console.log('render done');
+
+    });
 };
 
 
-// todoControl.addEventListener('submit', function(event) {
-//     event.preventDefault();
+todoControl.addEventListener('submit', function(event) {
+    event.preventDefault();
 
-//     let value = headerInput.value;
+    let value = headerInput.value;
 
-//     let newTodo = {
-//         value: value,
-//         completed: false
-//     };
+    let newTodo = {
+        value: value,
+        completed: false
+    };
 
-//     // todoData.push({value, completed}); //новый формат es6
-//     todoData.push(newTodo);
+    // todoData.push({value, completed}); //новый формат es6
+    todoData.push(newTodo);
 
-//     console.log('todoData: ', todoData);
+    console.log('todoData: ', todoData);
 
-//     todoControl.reset();
+    todoControl.reset();
 
-//     render();
-// });
+    render();
+});
 
 /* 
 todoControl.addEventListener('submit', function(event) {
