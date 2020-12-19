@@ -9,20 +9,31 @@ const headerInput = document.querySelector('.header-input');
 const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
-const todoData = [
-    {
-        value: 'Сварить кофе',
-        completed: false
-    },
-    {
-        value: 'Сварить чай',
-        completed: true
-    },
-    {
-        value: 'Сделать домашку сегодня',
-        completed: false
-    }
-];
+
+const myKey = '123';
+
+let todoData = [];
+
+// todoData.push({value: 'We buy an elephant', completed: false});
+    
+//загружаем список дел из localStorage
+function saveStorage() {
+    localStorage.setItem(myKey, JSON.stringify(todoData));
+};
+
+function loadDataFromStorage() {
+    todoData = JSON.parse(localStorage.getItem(myKey));
+}
+loadDataFromStorage();
+
+
+    
+// let jsonObj = JSON.stringify(todoData);
+// localStorage.setItem('123', jsonObj);
+
+// let jsObj = localStorage.getItem('123');
+// let todo = JSON.parse(jsObj);
+
 
 //пробуем отрендерить
 const render = function() {
@@ -62,11 +73,31 @@ const render = function() {
             //false - верхний список еще невыполненных дел
             todoList.append(liTodoItem);
         }
+
+        //на каждой ветке цикла достаем нашу кнопку
+        const btnTodoRemove = liTodoItem.querySelector('.todo-remove');
+        const btnTodoComplete = liTodoItem.querySelector('.todo-complete');
         
-        console.log('render done');
+        
+        btnTodoRemove.addEventListener('click', (event) => {
+            console.log('нажал на корзину');
+            item.value = '';
+            saveStorage();
+            render();
+        });
+        
+        btnTodoComplete.addEventListener('click', (event) => {
+            console.log('нажал на добавить или убрать');
+            item.completed = !item.completed;
+            saveStorage();
+            render();
+        });
+        
+
     });//forEach
 
 };
+render();   
 
 
 //добавляем слушатель события submit
@@ -74,12 +105,8 @@ const render = function() {
 todoControl.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    //let value = headerInput.value;
-    // let completed = false;  
-    
     //проверка на пустой ввод поля
     if (headerInput.value.trim() === '') {
-
         //пустое поле или пробелы
         ((str) => {
             console.log(str);
@@ -87,7 +114,6 @@ todoControl.addEventListener('submit', function(event) {
         })('Поле не может быть пустым!');
 
     } else {
-
         //новый обект
         let newTodo = {
             value: headerInput.value, //значение в поле input
@@ -99,9 +125,27 @@ todoControl.addEventListener('submit', function(event) {
 
     todoControl.reset(); //обнуляем поля формы
 
+    saveStorage();
     render(); //в конце события запускаем рендер списка
+    // localStorage.setItem('123', JSON.stringify(todoData));
 });
 
+
+
+
+
+
+
+
+
+// let jsonObj = JSON.stringify(todoData);
+// localStorage.setItem(myKey, jsonObj);
+
+// let jsObj = localStorage.getItem('123');
+// let todo = JSON.parse(jsObj);
+
+//сохраняем в localStorage
+// localStorage.setItem('123', JSON.stringify(todoData));
 
 
 
@@ -141,7 +185,3 @@ todoControl.addEventListener('submit', function(event) {
 			</div>
 		</li> -->
   */
-
-
-
-render();
