@@ -10,41 +10,38 @@ const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
 
-const myKey = '123';
+const myKey = 'todokey';
 
 let todoData = [];
 
 // todoData.push({value: 'We buy an elephant', completed: false});
     
 //загружаем список дел из localStorage
-function saveStorage() {
+function saveDataToStorage() {
     localStorage.setItem(myKey, JSON.stringify(todoData));
 };
 
 function loadDataFromStorage() {
     todoData = JSON.parse(localStorage.getItem(myKey));
-}
-loadDataFromStorage();
-
+    //заглушка на случай если нет данных в localStorage
+    if ( !todoData ) {
+        console.log('при загрузке todoData null: ', todoData);
+        todoData = [];//заглушим пустым массивом
+    }
+};
 
     
-// let jsonObj = JSON.stringify(todoData);
-// localStorage.setItem('123', jsonObj);
-
-// let jsObj = localStorage.getItem('123');
-// let todo = JSON.parse(jsObj);
-
-
 //пробуем отрендерить
 const render = function() {
     //сразу же обнуляем списки листов
     todoList.textContent = '';
     todoCompleted.textContent = '';
 
+    console.log('arrray', todoData);
 
-    todoData.forEach(function(item) {
+    //перебор всех элементов загруженного массива для отрисовки
+    todoData.forEach( (item) => {
         console.log('item: ', item);
-
 
         //генерим элементы как в тудушке
         let liTodoItem = document.createElement('li');
@@ -81,23 +78,40 @@ const render = function() {
         
         btnTodoRemove.addEventListener('click', (event) => {
             console.log('нажал на корзину');
-            item.value = '';
-            saveStorage();
+            item.value = ''; //отмечаем элемент пустым
+
+            /** TODO здесь добавляем функцию удаления пустого элемента */
+            // так как по сути удаление элемента массива происходит только здесь, пишем этот код здесь
+            let index = todoData.findIndex( item => item.value.trim() === '' );
+
+            if ( index >= 0) {
+                console.log('пустой элемент найден - удаляем');
+                // deletit = todoData.splice(index, 1);
+                todoData.splice(index, 1);
+
+            } else {
+                console.log('нет пустых элементов удалять нечего');
+            }
+
+            saveDataToStorage();
             render();
         });
         
         btnTodoComplete.addEventListener('click', (event) => {
             console.log('нажал на добавить или убрать');
-            item.completed = !item.completed;
-            saveStorage();
+            item.completed = !item.completed; //инвертируем булевое значение по клику
+            saveDataToStorage();
             render();
         });
-        
 
     });//forEach
+};//render
 
-};
+// console.log(todoData);
+
+loadDataFromStorage();
 render();   
+
 
 
 //добавляем слушатель события submit
@@ -125,7 +139,7 @@ todoControl.addEventListener('submit', function(event) {
 
     todoControl.reset(); //обнуляем поля формы
 
-    saveStorage();
+    saveDataToStorage();
     render(); //в конце события запускаем рендер списка
     // localStorage.setItem('123', JSON.stringify(todoData));
 });
